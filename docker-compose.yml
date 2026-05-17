@@ -1,0 +1,38 @@
+version: '3'
+
+services:
+  frontend:
+    build: ./ui/client
+    restart: always
+    ports:
+      - '3000:5173'
+    volumes:
+      - ./ui/client:/app
+      - /app/node_modules
+    depends_on:
+      - api
+
+  api:
+    build: ./backend
+    restart: always
+    ports:
+      - '5062:8080'
+    environment:
+      ConnectionStrings__DefaultConnection: "Server=db,1433;Database=AuthDb;User Id=sa;Password=YourStrong@Pass123;TrustServerCertificate=True"
+    depends_on:
+      - db
+
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    platform: linux/amd64
+    restart: always
+    environment:
+      SA_PASSWORD: "YourStrong@Pass123"
+      ACCEPT_EULA: "Y"
+    ports:
+      - '1433:1433'
+    volumes:
+      - sql_data:/var/opt/mssql
+
+volumes:
+  sql_data:

@@ -1,0 +1,6 @@
+@Smart_Life_Planner_HostAddress = http://localhost:5196
+
+GET {{Smart_Life_Planner_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
