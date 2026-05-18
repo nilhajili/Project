@@ -10,7 +10,7 @@ services:
     image: nilhajili27/smartlife-backend:latest
     restart: always
     ports:
-      - "5062:8080"
+      - "5001:8080"
     environment:
       ConnectionStrings__DefaultConnection: "Server=db,1433;Database=AuthDb;User Id=sa;Password=YourStrong@Pass123;TrustServerCertificate=True"
     depends_on:
