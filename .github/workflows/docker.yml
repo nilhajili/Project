@@ -16,16 +16,16 @@ jobs:
         run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
       - name: Build backend image
-        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/smartlife-backend ./backend
+        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/smartlife-backend:latest ./backend
 
       - name: Build frontend image
-        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/smartlife-frontend ./ui/client
+        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/smartlife-frontend:latest ./ui/client
 
       - name: Push backend image
-        run: docker push ${{ secrets.DOCKER_USERNAME }}/smartlife-backend
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/smartlife-backend:latest
 
       - name: Push frontend image
-        run: docker push ${{ secrets.DOCKER_USERNAME }}/smartlife-frontend
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/smartlife-frontend:latest
 
 
   deploy:
@@ -42,13 +42,13 @@ jobs:
           script: |
             docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
 
-            docker pull ${{ secrets.DOCKER_USERNAME }}/smartlife-backend
-            docker pull ${{ secrets.DOCKER_USERNAME }}/smartlife-frontend
+            docker pull ${{ secrets.DOCKER_USERNAME }}/smartlife-backend:latest
+            docker pull ${{ secrets.DOCKER_USERNAME }}/smartlife-frontend:latest
 
             docker stop backend || true
             docker rm backend || true
             docker stop frontend || true
             docker rm frontend || true
 
-            docker run -d --name backend -p 5001:5001 ${{ secrets.DOCKER_USERNAME }}/smartlife-backend
-            docker run -d --name frontend -p 3000:3000 ${{ secrets.DOCKER_USERNAME }}/smartlife-frontend
+            docker run -d --name backend -p 5001:5001 ${{ secrets.DOCKER_USERNAME }}/smartlife-backend:latest
+            docker run -d --name frontend -p 3000:3000 ${{ secrets.DOCKER_USERNAME }}/smartlife-frontend:latest
