@@ -6,6 +6,7 @@ services:
       - "3000:5173"
 
   api:
+#msksm
     image: nilhajili27/smartlife-backend:latest
     restart: always
     ports:
