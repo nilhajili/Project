@@ -17,7 +17,15 @@ builder.WebHost.UseUrls("http://0.0.0.0:5001");
 
 #region Database
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("DefaultConnection"),
+        sqlServerOptionsAction: sqlOptions =>
+        {
+            sqlOptions.EnableRetryOnFailure(
+                maxRetryCount: 5, // Baza cavab verməsə 5 dəfə yenidən cəhd et
+                maxRetryDelay: TimeSpan.FromSeconds(10), // Hər cəhddə 10 saniyə gözlə
+                errorNumbersToAdd: null);
+        }));
 #endregion
 
 #region Services

@@ -48,7 +48,7 @@ jobs:
           script: |
 
             # Docker install
-            sudo dnf install docker -y  true
+            sudo dnf install docker -y || true
 
             # Docker start
             sudo systemctl start docker
@@ -73,6 +73,8 @@ jobs:
                   ACCEPT_EULA: "Y"
                 ports:
                   - "1433:1433"
+                volumes:
+                  - sql_data:/var/opt/mssql
 
               backend:
                 image: ${{ secrets.DOCKER_USERNAME }}/smartlife-backend:latest
@@ -90,7 +92,7 @@ jobs:
                 container_name: frontend
                 restart: always
                 ports:
-                  - "3000:3000"
+                  - "3000:5173"
                 depends_on:
                   - backend
 
@@ -103,7 +105,7 @@ jobs:
 
             # YENİLİKLƏR BURADAN BAŞLAYIR
             # Köhnə konteynerlərin adla tapılıb məcburi silinməsi (Conflict xətasının qarşısını alır)
-            sudo docker rm -f backend frontend  true
+            sudo docker rm -f backend frontend || true
             
             sudo docker compose down || true
             sudo docker compose pull
@@ -111,4 +113,3 @@ jobs:
 
             # Dangling (istifadəsiz) image-ləri silərək EC2 yaddaşını təmiz saxlamaq
             sudo docker image prune -f
-#           # EC2-dəki konteynerlərin və image-lərin vəziyyətini yoxlamaq
