@@ -11,6 +11,10 @@ using SmartLifePlanner.Services.Implementations;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
+builder.WebHost.UseUrls("http://0.0.0.0:5001");
+
+
 #region Database
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -43,7 +47,9 @@ builder.Services.AddAuthentication(options =>
         ValidateIssuerSigningKey = true,
         ValidIssuer = jwtSettings["Issuer"],
         ValidAudience = jwtSettings["Audience"],
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey!)),
+        IssuerSigningKey = new SymmetricSecurityKey(
+            Encoding.UTF8.GetBytes(secretKey!)
+        ),
         ClockSkew = TimeSpan.Zero
     };
 });
@@ -51,18 +57,18 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddAuthorization();
 #endregion
 
-#region Controllers
-builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-#endregion
+#region Controllers + JSON
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
-        // Dövrü obyektləri serialize edərkən xəta verməməsi üçün
         options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
-        options.JsonSerializerOptions.WriteIndented = true; // optional: daha oxunaqlı JSON üçün
+        options.JsonSerializerOptions.WriteIndented = true;
     });
-#region Swagger + JWT Support
+
+builder.Services.AddEndpointsApiExplorer();
+#endregion
+
+#region Swagger
 builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new OpenApiInfo
@@ -73,7 +79,7 @@ builder.Services.AddSwaggerGen(options =>
 
     options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
-        Description = "Enter:  {your JWT token}",
+        Description = "Enter: Bearer {your JWT token}",
         Name = "Authorization",
         In = ParameterLocation.Header,
         Type = SecuritySchemeType.Http,
@@ -113,14 +119,14 @@ builder.Services.AddCors(options =>
 var app = builder.Build();
 
 #region Middleware
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
-
+app.UseRouting();
 
 app.UseCors("AllowAll");
 
@@ -128,6 +134,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
 #endregion
 
 app.Run();
