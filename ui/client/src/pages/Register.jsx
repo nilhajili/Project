@@ -19,7 +19,7 @@ export default function Register() {
 
     
     try {
-      const response = await fetch("http://localhost:5062/api/Auth/register", {
+      const response = await fetch("http://52.7.95.217:5062/api/Auth/register", {
           method: "POST",
           headers: {
             "Content-Type": "application/json"
