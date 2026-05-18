@@ -94,3 +94,4 @@ jobs:
 
             # Dangling (istifadəsiz) image-ləri silərək EC2 yaddaşını təmiz saxlamaq
             sudo docker image prune -f
+#           # EC2-dəki konteynerlərin və image-lərin vəziyyətini yoxlamaq
