@@ -137,7 +137,7 @@ export default function Dashboard() {
         </div>
 
 
-        <div className="bg-black p-6 rounded-3xl shadow-lg border border-gray-100 flex-1 flex flex-col">
+        <div className="bg-white p-6 rounded-3xl shadow-lg border border-gray-100 flex-1 flex flex-col">
           <h2 className="text-2xl font-semibold text-gray-800 mb-4"> Today's Tasks</h2>
           <ul className="space-y-2 flex-1">
             {filteredTasks.length > 0 ? (
