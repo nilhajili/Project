@@ -64,12 +64,26 @@ jobs:
             cat > /home/ec2-user/app/docker-compose.yml << 'EOF'
             services:
 
+              db:
+                image: mcr.microsoft.com/mssql/server:2022-latest
+                container_name: db
+                restart: always
+                environment:
+                  SA_PASSWORD: "YourStrong@Pass123"
+                  ACCEPT_EULA: "Y"
+                ports:
+                  - "1433:1433"
+
               backend:
                 image: ${{ secrets.DOCKER_USERNAME }}/smartlife-backend:latest
                 container_name: backend
                 restart: always
                 ports:
                   - "5001:5001"
+                environment:
+                  ConnectionStrings__DefaultConnection: "Server=db,1433;Database=AuthDb;User Id=sa;Password=YourStrong@Pass123;TrustServerCertificate=True"
+                depends_on:
+                  - db
 
               frontend:
                 image: ${{ secrets.DOCKER_USERNAME }}/smartlife-frontend:latest
@@ -79,6 +93,9 @@ jobs:
                   - "3000:3000"
                 depends_on:
                   - backend
+
+            volumes:
+              sql_data:
 
             EOF
 
