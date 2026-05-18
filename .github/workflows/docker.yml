@@ -48,7 +48,7 @@ jobs:
           script: |
 
             # Docker install
-            sudo dnf install docker -y || true
+            sudo dnf install docker -y  true
 
             # Docker start
             sudo systemctl start docker
@@ -56,10 +56,7 @@ jobs:
 
             # Docker Compose install
             sudo mkdir -p /usr/local/lib/docker/cli-plugins
-
-            sudo curl -SL https://github.com/docker/compose/releases/latest/download/docker-compose-linux-x86_64 \
-            -o /usr/local/lib/docker/cli-plugins/docker-compose
-
+            sudo curl -SL https://github.com/docker/compose/releases/latest/download/docker-compose-linux-x86_64 -o /usr/local/lib/docker/cli-plugins/docker-compose
             sudo chmod +x /usr/local/lib/docker/cli-plugins/docker-compose
 
             mkdir -p /home/ec2-user/app
@@ -87,6 +84,13 @@ jobs:
 
             cd /home/ec2-user/app
 
+            # YENİLİKLƏR BURADAN BAŞLAYIR
+            # Köhnə konteynerlərin adla tapılıb məcburi silinməsi (Conflict xətasının qarşısını alır)
+            sudo docker rm -f backend frontend  true
+            
             sudo docker compose down || true
             sudo docker compose pull
             sudo docker compose up -d
+
+            # Dangling (istifadəsiz) image-ləri silərək EC2 yaddaşını təmiz saxlamaq
+            sudo docker image prune -f
