@@ -120,6 +120,7 @@ export default function Register() {
               placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              autoComplete="new-password"
               className="w-full border rounded-lg p-3 outline-none focus:ring-2 focus:ring-[#574cec]"
             />
             
