@@ -129,7 +129,7 @@ export default function Dashboard() {
           </div>
 
          
-          <div className="bg-white p-6 pb-28 rounded-3xl shadow-lg border border-gray-100 flex-1 h-full flex flex-col justify-center">
+          <div className="bg-grey p-6 pb-28 rounded-3xl shadow-lg border border-gray-100 flex-1 h-full flex flex-col justify-center">
             <h2 className="text-2xl font-semibold text-gray-800 mb-4"> Task Progress</h2>
             {!loading && <StatsCardTask data={statusData} />}
             {loading && <p>Loading tasks...</p>}
