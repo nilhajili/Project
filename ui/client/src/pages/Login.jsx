@@ -81,7 +81,7 @@ export default function Login() {
         <div className="bg-white p-10 rounded-xl shadow-lg w-[380px]">
 
           <h2 className="text-2xl font-semibold mb-6">
-            Log in to your account
+            Login to your account
           </h2>
 
           <div className="space-y-4">
